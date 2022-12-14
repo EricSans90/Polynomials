@@ -15,6 +15,7 @@ public class MyPolynomial {
 
     public MyPolynomial(int degree){
         this.degree= degree;
+        //Important:
         coeffs = new double[degree+1];
         for (int i=0; i<degree; i++){
             this.coeffs[i]=0;
@@ -65,10 +66,50 @@ public class MyPolynomial {
             maxDegree=another.getDegree();
         }
         addition = new MyPolynomial(maxDegree);
-        for (int h=maxDegree; h>=0;h--){
-            addition.coeffs[h] = this.coeffs[h]+ another.getCoeffs(h);
+        if (this.degree== another.getDegree()){
+            for (int h=maxDegree; h>=0;h--){
+                addition.coeffs[h] = this.coeffs[h]+ another.getCoeffs(h);
+            }
+            return addition;
+        } else if (this.degree> another.getDegree()) {
+            int i = 0;
+            MyPolynomial aux = new MyPolynomial(this.degree);
+            for (i = 0; i <= another.getDegree(); i++) {
+                aux.coeffs[i] = another.coeffs[i];
+            }
+            for (int j = i; j <= this.degree; j++) {
+                aux.coeffs[j] = 0;
+            }
+            for (int h = maxDegree; h >= 0; h--) {
+                addition.coeffs[h] = this.coeffs[h] + aux.coeffs[h];
+            }
+            return addition;
+        } else {
+            int i = 0;
+            MyPolynomial aux = new MyPolynomial(another.getDegree());
+            for (i = 0; i <= this.degree; i++) {
+                aux.coeffs[i] = this.coeffs[i];
+            }
+            for (int j = i; j <= another.getDegree(); j++) {
+                aux.coeffs[j] = 0;
+            }
+            for (int h = maxDegree; h >= 0; h--) {
+                addition.coeffs[h] = aux.coeffs[h] + another.coeffs[h];
+            }
         }
         return addition;
+    }
+
+    public MyPolynomial multiply(MyPolynomial another) {
+        MyPolynomial multi;
+        int maxDegree=this.degree* another.getDegree();
+        multi = new MyPolynomial(maxDegree+1);
+        for (int i=0; i<=this.degree; i++){
+            for(int j=0; j<= another.getDegree(); j++){
+                multi.coeffs[i+j]+=this.coeffs[i]*another.getCoeffs(j);
+            }
+        }
+        return multi;
     }
 
     public double getCoeffs(int n) {
